@@ -7,6 +7,13 @@ use App\Http\Controllers\Api\LaporanController;
 use App\Models\anggota;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/test-api', function () {
+    return response()->json([
+        'status' => 'success',
+        'message' => 'API Laravel berjalan di Vercel'
+    ]);
+});
+
 Route::get('/buku', [BukuController::class, 'index'])
     ->middleware(['auth:sanctum', 'permission:lihat buku|lihat daftar buku|kelola buku'])
     ->name('api.buku.index');
