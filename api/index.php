@@ -8,8 +8,16 @@ $routes = $app->make('router')->getRoutes();
 
 header('Content-Type: application/json');
 
+$result = [];
+
+foreach ($routes as $route) {
+    $result[] = [
+        'uri' => $route->uri(),
+        'methods' => $route->methods(),
+    ];
+}
+
 echo json_encode([
-    'api_test_route_exists' => $routes->match(
-        Illuminate\Http\Request::create('/api/test-api', 'GET')
-    )->uri(),
+    'total_routes' => count($result),
+    'routes' => $result,
 ]);
