@@ -1,23 +1,21 @@
 <?php
 
-require __DIR__ . '/../vendor/autoload.php';
-
-$app = require_once __DIR__ . '/../bootstrap/app.php';
-
-$routes = $app->make('router')->getRoutes();
-
 header('Content-Type: application/json');
+
+$files = [
+    'routes_file' => __DIR__ . '/../bootstrap/cache/routes-v7.php',
+    'routes_file_alt' => __DIR__ . '/../bootstrap/cache/routes.php',
+    'custom_routes_file' => '/tmp/routes.php',
+];
 
 $result = [];
 
-foreach ($routes as $route) {
-    $result[] = [
-        'uri' => $route->uri(),
-        'methods' => $route->methods(),
+foreach ($files as $name => $file) {
+    $result[$name] = [
+        'path' => $file,
+        'exists' => file_exists($file),
+        'size' => file_exists($file) ? filesize($file) : null,
     ];
 }
 
-echo json_encode([
-    'total_routes' => count($result),
-    'routes' => $result,
-]);
+echo json_encode($result);
