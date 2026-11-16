@@ -1,20 +1,17 @@
 <?php
 
+require __DIR__ . '/../vendor/autoload.php';
+
+$app = require_once __DIR__ . '/../bootstrap/app.php';
+
 header('Content-Type: application/json');
 
-$files = [
-    'api_routes' => __DIR__ . '/../routes/api.php',
-    'web_routes' => __DIR__ . '/../routes/web.php',
-    'bootstrap_app' => __DIR__ . '/../bootstrap/app.php',
-];
-
-$result = [];
-
-foreach ($files as $name => $file) {
-    $result[$name] = [
-        'exists' => file_exists($file),
-        'size' => file_exists($file) ? filesize($file) : null,
-    ];
-}
-
-echo json_encode($result);
+echo json_encode([
+    'base_path' => $app->basePath(),
+    'routes_path' => $app->getConfigurationPath(),
+    'routes_cache_path' => $app->getCachedRoutesPath(),
+    'routes_cache_exists' => file_exists($app->getCachedRoutesPath()),
+    'api_routes_exists' => file_exists($app->basePath() . '/routes/api.php'),
+    'app_env' => $app->environment(),
+    'app_debug' => $app->hasDebugModeEnabled(),
+]);
