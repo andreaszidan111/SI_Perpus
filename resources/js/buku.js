@@ -1,15 +1,39 @@
 let halamanAktif = 1;
 let jumlahPerHalaman = 10;
+
+async function bacaResponsBuku(response, pesanGagal) {
+    if (!response.ok) {
+        if (response.status === 401) {
+            throw new Error('Sesi login tidak ditemukan. Silakan login ulang.');
+        }
+
+        if (response.status === 403) {
+            throw new Error('Akun tidak memiliki izin untuk mengakses data buku.');
+        }
+
+        throw new Error(`${pesanGagal} (HTTP ${response.status}).`);
+    }
+
+    const contentType = response.headers.get('content-type') || '';
+
+    if (!contentType.includes('application/json')) {
+        throw new Error(`Server mengirim respons non-JSON (HTTP ${response.status}).`);
+    }
+
+    return response.json();
+}
+
 async function ambilDataBuku(page = halamanAktif) {
     try {
         const response = await fetch(
-            `/api/buku?page=${page}&per_page=${jumlahPerHalaman}`
+            `/api/buku?page=${page}&per_page=${jumlahPerHalaman}`,
+            {
+                headers: { 'Accept': 'application/json' },
+                credentials: 'same-origin'
+            }
         );
-        if (!response.ok) {
-            throw new Error('Gagal mengambil data buku.');
-        }
 
-        const hasil = await response.json();
+        const hasil = await bacaResponsBuku(response, 'Gagal mengambil data buku.');
         halamanAktif = hasil.meta.current_page;
 
         tampilkanBuku(hasil.data);
@@ -91,13 +115,11 @@ function tampilkanBuku(daftarBuku) {
 // nomer 3
 async function editBuku(id) {
     try {
-        const response = await fetch(`/api/buku/${id}`);
-
-        if (!response.ok) {
-            throw new Error('Gagal mengambil data buku.');
-        }
-
-        const hasil = await response.json();
+        const response = await fetch(`/api/buku/${id}`, {
+            headers: { 'Accept': 'application/json' },
+            credentials: 'same-origin'
+        });
+        const hasil = await bacaResponsBuku(response, 'Gagal mengambil data buku.');
 
         const buku = hasil.data;
 
