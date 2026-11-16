@@ -20,7 +20,7 @@ class peminjamanFactory extends Factory
     {
         return [
             'anggota_id' => Anggota::inRandomOrder()->first()->id,
-            'buku_id' => Buku::inRandomOrder()->first()->id,
+            'buku_id' => buku::inRandomOrder()->first()->id,
             'tanggal_pinjam' => fake()->dateTimeBetween('-1 month', 'now')->format('Y-m-d'),
             'tanggal_kembali' => fake()->boolean(70)
                 ? fake()->dateTimeBetween('now', '+1 month')->format('Y-m-d')

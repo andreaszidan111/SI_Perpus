@@ -252,7 +252,7 @@ class PeminjamanController extends Controller
                 ], 422);
             }
 
-            $buku = Buku::query()
+            $buku = buku::query()
                 ->lockForUpdate()
                 ->findOrFail($peminjaman->buku_id);
 

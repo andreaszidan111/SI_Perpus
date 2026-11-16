@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBukuRequest;
 use App\Http\Requests\UpdateBukuRequest;
-use App\Models\Buku;
+use App\Models\buku;
 use Illuminate\Http\Request;
 use App\Http\Resources\BukuResource;
 

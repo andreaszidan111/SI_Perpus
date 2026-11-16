@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Peminjaman;
-use App\Models\Buku;
+use App\Models\buku;
 use Illuminate\Http\Request;
 
 class LaporanController extends Controller
@@ -60,7 +60,7 @@ class LaporanController extends Controller
             + $statistik['total_denda_kondisi'];
 
         // Rekapitulasi peminjaman setiap buku
-        $rekapBuku = Buku::with('kategori')
+        $rekapBuku = buku::with('kategori')
             ->withCount([
                 'peminjaman as total_dipinjam' => function ($q) use ($tanggalMulai, $tanggalSelesai) {
                     $q->whereBetween('tanggal_pinjam', [
